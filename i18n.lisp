@@ -1,6 +1,6 @@
 (defpackage multiplication/i18n
   (:use #:cl)
-  (:import-from #:cl-locale)
+;;  (:import-from #:cl-locale)
   (:import-from #:global-vars)
   (:import-from #:str)
   (:export #:i18n
@@ -46,34 +46,39 @@
     (t "default")))
 
 
-(cl-locale:define-dictionary hello
-  (:en '(("hello-world" . "Hello World!")
-         ("easy-tip" . "This is easy!")
-         ("start-button" . "Start!")
-         ("tip-label" . "Hint:")))
-  (:ru '(("hello-world" . "Привет Мир!")
-         ("easy-tip" . "Тут всё просто!")
-         ("start-button" . "Начать!")
-         ("tip-label" . "Подсказка:"))))
+;;; (cl-locale:define-dictionary hello
+;;;   (:en '(("hello-world" . "Hello World!")
+;;;          ("easy-tip" . "This is easy!")
+;;;          ("start-button" . "Start!")
+;;;          ("tip-label" . "Hint:")))
+;;;   (:ru '(("hello-world" . "Привет Мир!")
+;;;          ("easy-tip" . "Тут всё просто!")
+;;;          ("start-button" . "Начать!")
+;;;          ("tip-label" . "Подсказка:"))))
 
 
-(defun init ()
-  ;; Without this, cl-locale returns our
-  ;; sythetic keys without translation:
-  (setf cl-locale:*default-locale* nil)
+;;; (defun init ()
+;;;   ;; Without this, cl-locale returns our
+;;;   ;; sythetic keys without translation:
+;;;   (setf cl-locale:*default-locale* nil)
 
-  (setf cl-locale:*locale*
-        (let ((lang
-               (default-language)))
-          (cond
-           ((string-equal lang "ru")
-            :ru)
-           (t :en))))
+;;;   (setf cl-locale:*locale*
+;;;         (let ((lang
+;;;                (default-language)))
+;;;           (cond
+;;;            ((string-equal lang "ru")
+;;;             :ru)
+;;;            (t :en))))
 
-  (setf *initialized* t))
+;;;   (setf *initialized* t))
 
+
+;;; (defun i18n (key)
+;;;   (unless *initialized*
+;;;     (init))
+;;;   (cl-locale:i18n key))
 
 (defun i18n (key)
-  (unless *initialized*
-    (init))
-  (cl-locale:i18n key))
+  (values :en-US))
+
+;; (i18n :key)
