@@ -79,6 +79,6 @@
 ;;;   (cl-locale:i18n key))
 
 (defun i18n (key)
-  (values :en-US))
+  (values ":en-US"))
 
 ;; (i18n :key)
