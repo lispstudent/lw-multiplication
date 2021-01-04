@@ -8,7 +8,11 @@
   (when (probe-file quicklisp-init)
     (load quicklisp-init)))
 
-(push "./" asdf:*central-registry*)
+;#+MSWINDOWS (load "C:/apps/asdf/asdf.lisp")
+
+(push "/home/lisp/quicklisp/local-projects/lw-multiplication/" asdf:*central-registry*)
+
+;; (probe-file "./")
 
 ;; Without this, russian text is loaded incorrectly:
 
@@ -23,9 +27,13 @@
 (setf system:*file-encoding-detection-algorithm*
       '(force-utf-8-file-encoding))
 
+(ql:quickload :log4cl)
+(ql:quickload :str)
+(ql:quickload :global-vars)
+(ql:quickload :local-time)
 (asdf:load-system :multiplication/core)
 
-
+#+OS-MACOSX
 (let* ((app-path (merge-pathnames #P"Multitrainer.app" (lispworks:current-pathname)))
        (bundle (create-macos-application-bundle
                 app-path
@@ -36,15 +44,12 @@
                 ;; ...or CFBundleIdentifier from the LispWorks bundle
                 :identifier "com.40ants.multitrainer"
                 :version "0.1.0"
-                )))
-  
-  (deliver 'multiplication/core::start 
-           bundle
-           ;; level of compression
-           ;; from 0 to 5 where 5 is resulting the
-           ;; smallest binary
-           4
-           :interface :capi
-           :split :resources
-           ;; To suppress LispWork's splash screen
-           :startup-bitmap-file nil))
+                ))))
+
+#+MSWINDOWS
+(deliver 'multiplication/core::start 
+         "C:/home/lisp/Multitrainer.exe"
+         4
+         :interface :capi
+         :registry-path "multitrainer"
+         :startup-bitmap-file nil)
