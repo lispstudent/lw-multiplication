@@ -8,6 +8,7 @@
   (when (probe-file quicklisp-init)
     (load quicklisp-init)))
 
+
 ;#+MSWINDOWS (load "C:/apps/asdf/asdf.lisp")
 
 (push "/home/lisp/quicklisp/local-projects/lw-multiplication/" asdf:*central-registry*)
@@ -27,10 +28,8 @@
 (setf system:*file-encoding-detection-algorithm*
       '(force-utf-8-file-encoding))
 
-(ql:quickload :log4cl)
-(ql:quickload :str)
-(ql:quickload :global-vars)
-(ql:quickload :local-time)
+(ql:quickload :multiplication)
+
 (asdf:load-system :multiplication/core)
 
 #+OS-MACOSX
@@ -47,9 +46,12 @@
                 ))))
 
 #+MSWINDOWS
-(deliver 'multiplication/core::start 
-         "C:/home/lisp/Multitrainer.exe"
-         4
-         :interface :capi
-         :registry-path "multitrainer"
-         :startup-bitmap-file nil)
+(let* ((app-path (merge-pathnames #P"Multitrainer.exe" (lispworks:current-pathname))))
+  (deliver 'multiplication/core::start 
+           app-path
+           4
+           :interface :capi
+           :registry-path "multitrainer"
+           :icon-file  (asdf/system:system-relative-pathname :multiplication
+                                                             "logo/logo.ico")
+           :startup-bitmap-file nil))
